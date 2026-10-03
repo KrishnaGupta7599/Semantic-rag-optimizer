@@ -21,3 +21,19 @@ Semantic-Rag/
 ├── venv/
 ├── .gitignore
 └── requirements.txt
+
+## FastAPI Server
+
+We use Uvicorn to run our FastAPI application.
+
+```bash
+uvicorn app.main:app --reload
+
+API Endpoints
+GET /
+
+Checks whether the API is running.
+
+POST /ask
+
+Accepts a question and currently returns the same question.
