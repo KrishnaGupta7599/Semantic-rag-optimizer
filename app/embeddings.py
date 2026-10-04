@@ -1,35 +1,26 @@
-import fitz
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
+from ingest import load_and_chunk_pdf
 
 
-pdf_path="docs/syllabus.pdf"
-doc=fitz.open(pdf_path)
-
-text=""
-
-for page in doc:
-    text += page.get_text() + "\n"
-
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50
-)
-
-chunks = splitter.split_text(text)
+# Get chunks from ingestion
+chunks = load_and_chunk_pdf("docs/syllabus.pdf")
 
 print(f"Total chunks: {len(chunks)}")
 
-model=SentenceTransformer("all-MiniLM-L6-v2")
 
-embedding = model.encode(chunks)
+# Load embedding model
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
-print("Embedding generated!")
+
+# Generate embeddings
+embeddings = model.encode(chunks)
+
+print("Embeddings generated!")
 print("Number of chunks:", len(chunks))
-print("Embedding dimensions:", len(embedding[0]))
+print("Embedding dimensions:", len(embeddings[0]))
 
 print("\nFirst chunk:")
 print(chunks[0])
 
 print("\nFirst 10 values of its embedding:")
-print(embedding[0][:10])
+print(embeddings[0][:10])

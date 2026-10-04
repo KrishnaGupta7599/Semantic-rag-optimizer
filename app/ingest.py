@@ -1,21 +1,21 @@
-from pypdf import PdfReader
+import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-pdf_path="docs/syllabus.pdf"
-reader = PdfReader(pdf_path)
-text=""
 
-for page in reader.pages:
-    text +=page.extract_text() +"\n"
+def load_and_chunk_pdf(pdf_path):
 
-splitter= RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50
-)
+    doc = fitz.open(pdf_path)
 
-chunks = splitter.split_text(text)
-print(f"Total chunks: {len(chunks)}")
+    text = ""
 
-for i, chunk in enumerate(chunks):
-    print(f"\n--- Chunk {i + 1} ---")
-    print(chunk)
+    for page in doc:
+        text += page.get_text() + "\n"
+
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500,
+        chunk_overlap=50
+    )
+
+    chunks = splitter.split_text(text)
+
+    return chunks
