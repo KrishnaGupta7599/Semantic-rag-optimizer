@@ -1,15 +1,15 @@
-import fitz #give us access to PyMuPDF
+import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 def load_and_chunk_pdf(pdf_path):
 
     doc = fitz.open(pdf_path)
-    
+
     text = ""
 
     for page in doc:
-        text += page.get_text() + "\n"
+        text += page.get_text() + "\n" # type: ignore
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
