@@ -28,18 +28,23 @@ def search_documents(query, k=3):
         n_results=k
     )
 
+    print("Distances:", results["distances"])
     return results
 
 
 # STEP 4: Test our search
 if __name__ == "__main__":
-
     question = input("Ask a question about your syllabus: ")
 
     results = search_documents(question)
 
     print("\nMost relevant chunks:\n")
 
-    for i, chunk in enumerate(results["documents"][0], start=1):
-        print(f"\n--- Result {i} ---")
-        print(chunk)
+    documents = results.get("documents", [[]])[0]
+
+    if documents:
+        for i, chunk in enumerate(documents, start=1):
+            print(f"\n--- Result {i} ---")
+            print(chunk)
+    else:
+        print("No relevant chunks found.")
